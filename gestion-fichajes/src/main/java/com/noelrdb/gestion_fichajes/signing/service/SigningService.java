@@ -28,13 +28,17 @@ public class SigningService {
         
         // 2. Verificar que NO tenga fichaje activo
         Optional<Signing> activeSigning = signingRepository
-            .findTopByMiWorkerIdAndSignOutIsNullOrderBySignInDesc(workerId);
+            .findTopByWorkerIdAndSignOutIsNullOrderBySignInDesc(workerId);
         
         if (activeSigning.isPresent()) { 
             throw new IllegalStateException("Ya existe un fichaje de entrada sin salida");
         }
         
-        // 3. Crear nuevo fichaje
+        // 3. Activar al trabajador (está trabajando)
+        worker.setActive(true);
+        workerRepository.save(worker);
+        
+        // 4. Crear nuevo fichaje
         Signing signing = new Signing();
         signing.setMiWorker(worker);
         signing.setSignIn(LocalDateTime.now());
@@ -45,10 +49,16 @@ public class SigningService {
     public void signOut(int workerId) {
         // 1. Buscar fichaje activo (devuelve Signing, no Worker)
         Signing activeSigning = signingRepository
-            .findTopByMiWorkerIdAndSignOutIsNullOrderBySignInDesc(workerId)
+            .findTopByWorkerIdAndSignOutIsNullOrderBySignInDesc(workerId)
             .orElseThrow(() -> new IllegalStateException("No hay fichaje de entrada activo"));
         
-        // 2. Registrar salida directamente
+        // 2. Desactivar al trabajador (ya no está trabajando)
+        Worker worker = workerRepository.findById(workerId)
+            .orElseThrow(() -> new RuntimeException("Trabajador no encontrado"));
+        worker.setActive(false);
+        workerRepository.save(worker);
+        
+        // 3. Registrar salida directamente
         activeSigning.setSignOut(LocalDateTime.now());
         
         signingRepository.save(activeSigning);

@@ -10,8 +10,8 @@ import com.noelrdb.gestion_fichajes.signing.entity.Signing;
 public interface SigningRepository extends JpaRepository<Signing, Integer> {
     
     // Metodo para buscar fichajes por el ID del trabajador
-    List<Signing> findByMiWorkerId(int workerId);
+    List<Signing> findByWorkerId(int workerId);
 
-    Optional<Signing> findTopByMiWorkerIdAndSignOutIsNullOrderBySignInDesc(int workerId);
+    Optional<Signing> findTopByWorkerIdAndSignOutIsNullOrderBySignInDesc(int workerId);
 
 }

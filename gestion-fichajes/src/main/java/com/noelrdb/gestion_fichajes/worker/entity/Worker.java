@@ -35,10 +35,10 @@ public class Worker {
     private String dni;
     private String email;
     private String phone;
-    private Boolean active;
+    private Boolean active = false;
 
     @OneToMany(mappedBy = "worker")
-    private List<Signing> signing;
+    private List<Signing> signings;
 
     // Contructores sin parametrizar y parametrizados
     public Worker() {
@@ -111,12 +111,12 @@ public class Worker {
         this.active = active;
     }
 
-    public void setSigning(List<Signing> signing) {
-        this.signing = signing;
+    public void setSignings(List<Signing> signings) {
+        this.signings = signings;
     }
 
-    public List<Signing> getSigning() {
-        return signing;
+    public List<Signing> getSignings() {
+        return signings;
     }
 
     // Metodo to String paramostrar los datos

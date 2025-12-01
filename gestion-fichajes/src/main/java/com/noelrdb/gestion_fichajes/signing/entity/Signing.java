@@ -29,13 +29,12 @@ public class Signing {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
 
-
     /**
      * Anotación ManyToOne para la relación entre fichajes y currantes
      */
     @ManyToOne
     @JoinColumn(name = "worker_id")
-    private Worker miWorker;
+    private Worker worker;
 
 
     private LocalDateTime signIn;
@@ -47,7 +46,7 @@ public class Signing {
 
     public Signing (int id, Worker miWorker, LocalDateTime signIn, LocalDateTime signOut) {
         this.id = id;
-        this.miWorker = miWorker;
+        this.worker = miWorker;
         this.signIn = signIn;
         this.signOut = signOut;
     }
@@ -63,11 +62,11 @@ public class Signing {
 
 
     public Worker getMiWorker() {
-        return miWorker;
+        return worker;
     }
 
     public void setMiWorker(Worker miWorker) {
-        this.miWorker = miWorker;
+        this.worker = miWorker;
     }
 
     public LocalDateTime getSignIn() {
@@ -89,7 +88,7 @@ public class Signing {
     // Metodo toString
     @Override
     public String toString() {
-        return "Signing [id=" + id + ", miWorker=" + miWorker + ", signIn=" + signIn + ", signOut=" + signOut + "]";
+        return "Signing [id=" + id + ", worker=" + worker + ", signIn=" + signIn + ", signOut=" + signOut + "]";
     }
     
 }

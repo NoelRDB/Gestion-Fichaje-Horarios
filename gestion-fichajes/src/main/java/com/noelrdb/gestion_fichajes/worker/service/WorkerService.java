@@ -25,10 +25,17 @@ public class WorkerService{
 
     // Listar todos los currantes
     public List<Worker> findAllWorkers(){
-        return workerRepository.findAll();
+
+        try {
+            List <Worker> workers = workerRepository.findAll();
+            return workers;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
-    // Buscar un currante por su ID
+    // Buscar un currante por su ID - retorna Worker directamente
     public Worker findWorkerById(int id) {
         return workerRepository.findById(id).orElse(null);
     }

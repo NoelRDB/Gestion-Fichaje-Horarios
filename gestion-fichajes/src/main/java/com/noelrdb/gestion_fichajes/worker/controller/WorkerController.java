@@ -51,7 +51,7 @@ public class WorkerController {
         
         // Ahora crearle un objeto nuevo de Signing para inicializar la lista
         List<Signing> signingList = new ArrayList<>();
-        miWorker.setSigning(signingList);
+        miWorker.setSignings(signingList);
 
         }
 
@@ -77,13 +77,13 @@ public class WorkerController {
     
     // Listar todos los currantes
     public List<Worker> listAllWorkers(){
-
         System.out.println("--- Listado de todos los trabajadores ---");
-        for (Worker worker : workerService.findAllWorkers()) {
-            System.out.println(worker.toString());
-        }
+        List<Worker> workers = workerService.findAllWorkers();
 
-        return workerService.findAllWorkers();
+        for (Worker w : workers) {
+            System.out.println(w.toString());
+        }
+        return workers;
     }
 
     // Buscar un currante por su ID
@@ -95,9 +95,16 @@ public class WorkerController {
         id = teclado.nextInt();
         teclado.nextLine(); 
 
-        return workerService.findWorkerById(id);
-    }
+        Worker worker = workerService.findWorkerById(id);
 
+        if (worker == null) {
+            System.out.println("Trabajador no encontrado.");
+        } else {
+            System.out.println("Trabajador encontrado: " + worker.toString());
+        }
+
+        return worker;
+    }
 
 
     // Actualizar datos de un currante
@@ -139,8 +146,6 @@ public class WorkerController {
 
         System.out.println("Introduce el nuevo teléfono del trabajador:");
         miWorker.setPhone(teclado.nextLine());
-
-
 
         return workerService.updateWorker(id, miWorker);
     }
