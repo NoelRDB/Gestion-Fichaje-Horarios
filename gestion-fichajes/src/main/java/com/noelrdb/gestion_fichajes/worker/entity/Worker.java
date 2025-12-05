@@ -31,11 +31,13 @@ public class Worker {
     private int id;
 
     private String name;
+    private int code;
     private String surname;
     private String dni;
     private String email;
     private String phone;
     private Boolean active = false;
+    private Boolean isAdmin = false;
 
     @OneToMany(mappedBy = "worker")
     private List<Signing> signings;
@@ -44,9 +46,10 @@ public class Worker {
     public Worker() {
     }
 
-    public Worker(int id, String name, String surname, String dni, String email, String phone, Boolean active) {
+    public Worker(int id, String name, int code , String surname, String dni, String email, String phone, Boolean active) {
         this.id = id;
         this.name = name;
+        this.code = code;
         this.surname = surname;
         this.dni = dni;
         this.email = email;
@@ -69,6 +72,14 @@ public class Worker {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public String getSurname() {
@@ -111,6 +122,14 @@ public class Worker {
         this.active = active;
     }
 
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
     public void setSignings(List<Signing> signings) {
         this.signings = signings;
     }
@@ -122,7 +141,7 @@ public class Worker {
     // Metodo to String paramostrar los datos
     @Override
     public String toString() {
-        return "Worker [id=" + id + ", name=" + name + ", surname=" + surname + ", dni=" + dni + ", email=" + email + ", phone=" + phone + ", active=" + active + "]";
+        return "Worker [id=" + id + ", name=" + name + ", code=" + code + ", surname=" + surname + ", dni=" + dni + ", email=" + email + ", phone=" + phone + ", active=" + active + "]";
     }
 
 }

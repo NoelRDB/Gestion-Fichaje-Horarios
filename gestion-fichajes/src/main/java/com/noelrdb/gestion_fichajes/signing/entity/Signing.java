@@ -36,9 +36,13 @@ public class Signing {
     @JoinColumn(name = "worker_id")
     private Worker worker;
 
-
     private LocalDateTime signIn;
     private LocalDateTime signOut;
+    
+    // Campos para gestión de descansos
+    private LocalDateTime breakStart;      // Inicio del descanso actual
+    private Integer totalBreakSeconds = 0; // Total de SEGUNDOS de descanso tomados
+    private String status = "WORKING";     // Estados: WORKING, ON_BREAK, FINISHED
 
 
     // Constructores sin parametrizar y parametrizados
@@ -49,6 +53,8 @@ public class Signing {
         this.worker = miWorker;
         this.signIn = signIn;
         this.signOut = signOut;
+        this.totalBreakSeconds = 0;
+        this.status = "WORKING";
     }
 
     // Getters y setters
@@ -85,10 +91,35 @@ public class Signing {
         this.signOut = signOut;
     }
 
+    public LocalDateTime getBreakStart() {
+        return breakStart;
+    }
+
+    public void setBreakStart(LocalDateTime breakStart) {
+        this.breakStart = breakStart;
+    }
+
+    public Integer getTotalBreakSeconds() {
+        return totalBreakSeconds;
+    }
+
+    public void setTotalBreakSeconds(Integer totalBreakSeconds) {
+        this.totalBreakSeconds = totalBreakSeconds;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     // Metodo toString
     @Override
     public String toString() {
-        return "Signing [id=" + id + ", worker=" + worker + ", signIn=" + signIn + ", signOut=" + signOut + "]";
+        return "Signing [id=" + id + ", worker=" + worker + ", signIn=" + signIn + ", signOut=" + signOut + 
+               ", status=" + status + ", totalBreakSeconds=" + totalBreakSeconds + "]";
     }
     
 }

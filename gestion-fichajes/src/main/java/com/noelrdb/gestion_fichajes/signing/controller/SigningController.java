@@ -1,10 +1,12 @@
 package com.noelrdb.gestion_fichajes.signing.controller;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.stereotype.Controller;
 
+import com.noelrdb.gestion_fichajes.signing.entity.Signing;
 import com.noelrdb.gestion_fichajes.signing.service.SigningService;
 import com.noelrdb.gestion_fichajes.worker.entity.Worker;
 import com.noelrdb.gestion_fichajes.worker.service.WorkerService;
@@ -13,7 +15,7 @@ import com.noelrdb.gestion_fichajes.worker.service.WorkerService;
 public class SigningController {
     
     private final SigningService signingService;
-    private final WorkerService workerService; // ✅ Inyectar WorkerService directamente
+    private final WorkerService workerService;
     public Scanner teclado = new Scanner(System.in);
 
     public SigningController(SigningService signingService, WorkerService workerService) {
@@ -21,87 +23,137 @@ public class SigningController {
         this.workerService = workerService;
     }
 
-    // Metodo para realizar el fichaje de entrada
-    public void signIn() {
-        System.out.println("--- Fichaje de Entrada ---");
+    // Método para autenticar trabajador
+    private Worker authenticateWorker() {
+        System.out.println("\n=== AUTENTICACIÓN DE TRABAJADOR ===");
+        System.out.print("Introduce tu DNI: ");
+        String dni = teclado.nextLine().trim();
         
-        // 1. Listar trabajadores activos
-        List<Worker> workers = workerService.findAllWorkers();
-        
-        if (workers.isEmpty()) {
-            System.out.println("No hay trabajadores registrados.");
-            return;
-        }
-        
-        System.out.println("Trabajadores disponibles:");
-        for (Worker w : workers) {
-            System.out.println("ID: " + w.getId() + " - " + w.getName() + " " + w.getSurname());
-        }
-        
-        // 2. Pedir ID del trabajador
-        System.out.print("\nIntroduce el ID del trabajador: ");
-        int workerId = teclado.nextInt();
+        System.out.print("Introduce tu código: ");
+        int code = teclado.nextInt();
         teclado.nextLine(); // Limpiar buffer
         
-        // 3. Buscar trabajador
-        Worker workerSeleccionado = workerService.findWorkerById(workerId);
+        Worker worker = workerService.authenticate(dni, code);
         
-        if (workerSeleccionado == null) {
-            System.out.println(" Trabajador no encontrado.");
+        if (worker == null) {
+            System.out.println("DNI o código incorrectos.");
+        }
+        
+        return worker;
+    }
+
+    // Metodo para realizar el fichaje de entrada
+    public void signIn() {
+        // 1. Autenticar trabajador
+        Worker worker = authenticateWorker();
+        
+        if (worker == null) {
             return;
         }
         
-        Worker worker = workerSeleccionado;
-        
-        // 4. Realizar fichaje
+        // 2. Realizar fichaje
         try {
-            signingService.signIn(workerId);
-            System.out.println("Fichaje de entrada realizado con éxito para: " 
-                + worker.getName() + " " + worker.getSurname());
+            signingService.signIn(worker.getId());
+            System.out.println("Fichaje de ENTRADA realizado con éxito");
+            System.out.println("   Trabajador: " + worker.getName() + " " + worker.getSurname());
+            System.out.println("   Hora: " + java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
         } catch (Exception e) {
-            System.out.println(" Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
     // Metodo para realizar el fichaje de salida
     public void signOut() {
-        System.out.println("--- Fichaje de Salida ---");
+        // 1. Autenticar trabajador
+        Worker worker = authenticateWorker();
         
-        // 1. Listar trabajadores activos
-        List<Worker> workers = workerService.findAllWorkers();
-        
-        if (workers.isEmpty()) {
-            System.out.println("No hay trabajadores registrados.");
+        if (worker == null) {
             return;
         }
         
-        System.out.println("Trabajadores disponibles:");
-        for (Worker w : workers) {
-            System.out.println("ID: " + w.getId() + " - " + w.getName() + " " + w.getSurname());
-        }
-        
-        // 2. Pedir ID del trabajador
-        System.out.print("\nIntroduce el ID del trabajador: ");
-        int workerId = teclado.nextInt();
-        teclado.nextLine(); // Limpiar buffer
-        
-        // 3. Buscar trabajador
-        Worker workerSeleccionado = workerService.findWorkerById(workerId);
-        
-        if (workerSeleccionado == null) {
-            System.out.println("❌ Trabajador no encontrado.");
-            return;
-        }
-        
-        Worker worker = workerSeleccionado;
-        
-        // 4. Realizar fichaje
+        // 2. Realizar fichaje
         try {
-            signingService.signOut(workerId);
-            System.out.println("✅ Fichaje de salida realizado con éxito para: " 
-                + worker.getName() + " " + worker.getSurname());
+            signingService.signOut(worker.getId());
+            System.out.println("Fichaje de SALIDA realizado con éxito");
+            System.out.println("   Trabajador: " + worker.getName() + " " + worker.getSurname());
+            System.out.println("   Hora: " + java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
         } catch (Exception e) {
-            System.out.println("❌ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+    
+    // Método para ver trabajadores activos (los que están trabajando ahora)
+    public void showActiveWorkers() {
+        System.out.println("\n=== TRABAJADORES EN ACTIVO ===");
+        List<Worker> activeWorkers = workerService.findActiveWorkers();
+        
+        if (activeWorkers.isEmpty()) {
+            System.out.println("No hay trabajadores activos en este momento.");
+            return;
+        }
+        
+        System.out.println("Total: " + activeWorkers.size() + " trabajador(es) trabajando");
+        System.out.println("─────────────────────────────────────────────────");
+        for (Worker w : activeWorkers) {
+            System.out.println("• " + w.getName() + " " + w.getSurname() + " (ID: " + w.getId() + ")");
+        }
+    }
+    
+    // Método para ver todos los fichajes del día
+    public void showAllSignings() {
+        System.out.println("\n=== REGISTRO DE FICHAJES ===");
+        List<Signing> signings = signingService.getAllSignings();
+        
+        if (signings.isEmpty()) {
+            System.out.println("No hay fichajes registrados.");
+            return;
+        }
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        System.out.println("Total: " + signings.size() + " fichaje(s)");
+        System.out.println("─────────────────────────────────────────────────");
+        
+        for (Signing s : signings) {
+            Worker worker = s.getMiWorker();
+            String entrada = s.getSignIn() != null ? s.getSignIn().format(formatter) : "N/A";
+            String salida = s.getSignOut() != null ? s.getSignOut().format(formatter) : "Aún trabajando";
+            
+            System.out.println("Fichaje #" + s.getId());
+            System.out.println("  Trabajador: " + worker.getName() + " " + worker.getSurname());
+            System.out.println("  Entrada: " + entrada);
+            System.out.println("  Salida: " + salida);
+            System.out.println("─────────────────────────────────────────────────");
+        }
+    }
+    
+    // Método para ver fichajes de un trabajador específico
+    public void showWorkerSignings() {
+        Worker worker = authenticateWorker();
+        
+        if (worker == null) {
+            return;
+        }
+        
+        System.out.println("\n=== FICHAJES DE " + worker.getName().toUpperCase() + " " + worker.getSurname().toUpperCase() + " ===");
+        List<Signing> signings = signingService.getSigningsByWorkerId(worker.getId());
+        
+        if (signings.isEmpty()) {
+            System.out.println("No tienes fichajes registrados.");
+            return;
+        }
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        System.out.println("Total: " + signings.size() + " fichaje(s)");
+        System.out.println("─────────────────────────────────────────────────");
+        
+        for (Signing s : signings) {
+            String entrada = s.getSignIn() != null ? s.getSignIn().format(formatter) : "N/A";
+            String salida = s.getSignOut() != null ? s.getSignOut().format(formatter) : "Aún trabajando";
+            
+            System.out.println("Fichaje #" + s.getId());
+            System.out.println("  Entrada: " + entrada);
+            System.out.println("  Salida: " + salida);
+            System.out.println("─────────────────────────────────────────────────");
         }
     }
 }

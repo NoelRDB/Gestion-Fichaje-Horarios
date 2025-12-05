@@ -48,6 +48,10 @@ public class WorkerController {
         System.out.println("5º--------------------------------------------");
         System.out.println("Introduce el teléfono del trabajador:");
         miWorker.setPhone(teclado.nextLine());
+        System.out.println("6º--------------------------------------------");
+        System.out.println("Introduce el código del trabajador:");
+        miWorker.setCode(teclado.nextInt());
+        teclado.nextLine(); // Limpiar buffer
         
         // Ahora crearle un objeto nuevo de Signing para inicializar la lista
         List<Signing> signingList = new ArrayList<>();

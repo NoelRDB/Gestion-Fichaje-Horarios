@@ -1,11 +1,7 @@
 package com.noelrdb.gestion_fichajes;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import com.noelrdb.gestion_fichajes.menu.MenuController;
 
 @SpringBootApplication
 public class GestionFichajesApplication {
@@ -14,10 +10,12 @@ public class GestionFichajesApplication {
         SpringApplication.run(GestionFichajesApplication.class, args);
     }
 
-    @Bean
-    CommandLineRunner run(MenuController menuController) {
-        return args -> {
-            menuController.mostrarMenuPrincipal();
-        };
-    }
+    // Para ejecutar el menú desde consola, descomentar:
+    // @Bean
+    // CommandLineRunner run(MenuController menuController) {
+    //     return args -> {
+    //         menuController.mostrarMenuPrincipal();
+    //     };
+    // }
 }
+

@@ -1,0 +1,7 @@
+-- Insertar usuario ADMINISTRADOR (DNI: admin, código: 0)
+INSERT INTO workers (name, code, surname, dni, email, phone, active, is_admin) VALUES ('Administrador', 0, 'Sistema', 'admin', 'admin@sistema.com', '000000000', false, true);
+
+-- Insertar trabajadores de prueba
+INSERT INTO workers (name, code, surname, dni, email, phone, active, is_admin) VALUES ('Juan', 1234, 'García', '12345678A', 'juan@email.com', '600111222', false, false);
+INSERT INTO workers (name, code, surname, dni, email, phone, active, is_admin) VALUES ('María', 5678, 'López', '87654321B', 'maria@email.com', '600333444', false, false);
+INSERT INTO workers (name, code, surname, dni, email, phone, active, is_admin) VALUES ('Pedro', 9999, 'Martínez', '11223344C', 'pedro@email.com', '600555666', false, false);

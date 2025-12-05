@@ -49,6 +49,8 @@ public class WorkerService{
             existingWorker.setDni(worker.getDni());
             existingWorker.setEmail(worker.getEmail());
             existingWorker.setPhone(worker.getPhone());
+            existingWorker.setCode(worker.getCode());
+            existingWorker.setIsAdmin(worker.getIsAdmin());
             existingWorker.setActive(worker.getActive());
         }
         return workerRepository.save(existingWorker);
@@ -89,5 +91,14 @@ public class WorkerService{
         }
     }
     
+    // Método para autenticar trabajador con DNI y código
+    public Worker authenticate(String dni, int code) {
+        return workerRepository.findByDniAndCode(dni, code);
+    }
+    
+    // Método para listar trabajadores activos (los que están trabajando ahora)
+    public List<Worker> findActiveWorkers() {
+        return workerRepository.findByActiveTrue();
+    }
 
 }

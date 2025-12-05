@@ -24,10 +24,15 @@ public class MenuController {
         int opcion = 0;
 
         do {
-            System.out.println("\n=== GESTIÓN DE FICHAJES ===");
-            System.out.println("1. Gestión de Trabajadores");
-            System.out.println("2. Fichaje de Entrada");
-            System.out.println("3. Fichaje de Salida");
+            System.out.println("\n╔════════════════════════════════════════╗");
+            System.out.println("║    SISTEMA DE GESTIÓN DE FICHAJES     ║");
+            System.out.println("╚════════════════════════════════════════╝");
+            System.out.println("1. Fichaje de Entrada");
+            System.out.println("2. Fichaje de Salida");
+            System.out.println("3. Ver Trabajadores Activos");
+            System.out.println("4. Ver Todos los Fichajes");
+            System.out.println("5. Ver Mis Fichajes");
+            System.out.println("6. Gestión de Trabajadores (Admin)");
             System.out.println("0. Salir");
             System.out.print("Seleccione una opción: ");
 
@@ -36,11 +41,12 @@ public class MenuController {
                 scanner.nextLine(); // Limpiar buffer
 
                 switch (opcion) {
-                    case 1 -> menuTrabajadores();
-                    case 2 -> {
-                        signingController.signIn();
-                    }
-                    case 3 -> signingController.signOut();
+                    case 1 -> signingController.signIn();
+                    case 2 -> signingController.signOut();
+                    case 3 -> signingController.showActiveWorkers();
+                    case 4 -> signingController.showAllSignings();
+                    case 5 -> signingController.showWorkerSignings();
+                    case 6 -> menuTrabajadores();
                     case 0 -> System.out.println("Saliendo del programa...");
                     default -> System.out.println("Opción no válida.");
                 }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.noelrdb.gestion_fichajes.javafx.controller.LoginController"
+      style="-fx-background-color: #f5f5f5;">
+    
+    <padding>
+        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0"/>
+    </padding>
+
+    <VBox alignment="CENTER" spacing="30.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+        <padding>
+            <Insets bottom="40.0" left="50.0" right="50.0" top="40.0"/>
+        </padding>
+
+        <!-- Título -->
+        <Label text="Sistema de Fichajes" style="-fx-text-fill: #2c3e50;">
+            <font>
+                <Font name="System Bold" size="28.0"/>
+            </font>
+        </Label>
+
+        <Label text="Iniciar Sesión" style="-fx-text-fill: #7f8c8d;">
+            <font>
+                <Font size="16.0"/>
+            </font>
+        </Label>
+
+        <!-- Formulario -->
+        <VBox spacing="15.0" prefWidth="300.0">
+            
+            <!-- Campo DNI -->
+            <VBox spacing="5.0">
+                <Label text="DNI:" style="-fx-text-fill: #34495e;">
+                    <font>
+                        <Font size="14.0" name="System Bold"/>
+                    </font>
+                </Label>
+                <TextField fx:id="dniField" promptText="Introduce tu DNI" 
+                          style="-fx-background-radius: 5; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-padding: 10;">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </TextField>
+            </VBox>
+
+            <!-- Campo Código -->
+            <VBox spacing="5.0">
+                <Label text="Código:" style="-fx-text-fill: #34495e;">
+                    <font>
+                        <Font size="14.0" name="System Bold"/>
+                    </font>
+                </Label>
+                <PasswordField fx:id="codeField" promptText="Introduce tu código" 
+                              style="-fx-background-radius: 5; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-padding: 10;">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </PasswordField>
+            </VBox>
+
+            <!-- Botón Login -->
+            <Button text="Iniciar Sesión" onAction="#handleLogin" maxWidth="Infinity"
+                   style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 5; -fx-padding: 12; -fx-cursor: hand;">
+                <font>
+                    <Font size="14.0" name="System Bold"/>
+                </font>
+            </Button>
+
+        </VBox>
+
+    </VBox>
+
+</VBox>

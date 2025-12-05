@@ -13,5 +13,8 @@ public interface SigningRepository extends JpaRepository<Signing, Integer> {
     List<Signing> findByWorkerId(int workerId);
 
     Optional<Signing> findTopByWorkerIdAndSignOutIsNullOrderBySignInDesc(int workerId);
+    
+    // Método para buscar todos los fichajes activos (sin signOut)
+    List<Signing> findBySignOutIsNull();
 
 }
